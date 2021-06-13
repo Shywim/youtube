@@ -124,6 +124,7 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 	// https://github.com/kkdai/youtube/pull/190
 	loadChunk := func(pos int64) (int64, error) {
 		req.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", pos, pos+chunkSize-1))
+		req.Close = true
 
 		resp, err := c.httpDo(req)
 		if err != nil {
