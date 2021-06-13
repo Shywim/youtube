@@ -111,11 +111,6 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 		return nil, 0, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, 0, err
-	}
-
 	const chunkSize int64 = 10_000_000
 	r, w := io.Pipe()
 
@@ -123,8 +118,12 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 	// Downloading in multiple chunks is much faster:
 	// https://github.com/kkdai/youtube/pull/190
 	loadChunk := func(pos int64) (int64, error) {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+		if err != nil {
+			return nil, 0, err
+		}
+
 		req.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", pos, pos+chunkSize-1))
-		req.Close = true
 
 		resp, err := c.httpDo(req)
 		if err != nil {
