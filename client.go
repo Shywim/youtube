@@ -120,7 +120,7 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 	loadChunk := func(pos int64) (int64, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 		if err != nil {
-			return nil, 0, err
+			return 0, err
 		}
 
 		req.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", pos, pos+chunkSize-1))
