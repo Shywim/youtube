@@ -197,6 +197,7 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 		if err != nil {
 			return 0, err
 		}
+		req.Close = true
 
 		req.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", pos, pos+chunkSize-1))
 
