@@ -219,7 +219,7 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 		// load all the chunks
 		for pos := int64(0); pos < format.ContentLength; {
 			written, err := loadChunk(pos)
-			if err != nil {
+			if err != nil && err != io.ErrUnexpectedEOF {
 				fmt.Println("error in youtube client", err)
 				w.CloseWithError(err)
 				return
