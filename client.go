@@ -1,6 +1,7 @@
 package youtube
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -186,8 +187,8 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 	}
 
 	const chunkSize int64 = 10_000_000
-	r, w := io.Pipe()
-
+	r, pw := io.Pipe()
+	w := bufio.NewWriterSize(pw, 10_000_000)
 	// Loads a chunk a returns the written bytes.
 	// Downloading in multiple chunks is much faster:
 	// https://github.com/kkdai/youtube/pull/190
