@@ -222,14 +222,14 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 			written, err := loadChunk(pos)
 			if err != nil && err != io.ErrUnexpectedEOF {
 				fmt.Println("error in youtube client", err)
-				w.CloseWithError(err)
+				pw.CloseWithError(err)
 				return
 			}
 
 			pos += written
 		}
 
-		w.Close()
+		pw.Close()
 	}()
 
 	return r, format.ContentLength, nil
